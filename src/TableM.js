@@ -106,7 +106,7 @@ function QuickFilteringGrid() {
         <BasicModal addingUser= {addingUser} className='add'/>
         
         </div>
-      <DataGrid className='table' loading={update} columns={columns} rows={Users} getRowId={row=>row.id} sx={{color:'white',textAlign:'center', background:'black ',border:'solid #20293A', 
+      <DataGrid className='table' loading={update} columns={columns} rows={Users} getRowId={row=>row.id} sx={{color:'white',textAlign:'center', background:'black ',border:'solid 1px white', 
       '& .MuiDataGrid-row': {
       background: '#121826',
     }, '& .MuiDataGrid-row:hover': {
