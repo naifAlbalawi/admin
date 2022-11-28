@@ -6,6 +6,9 @@
 }
 .head .add {
     margin-left: 70%;
-    width: auto;
+    width: 120px;
     font-size: 50px;
+    
+    border-radius: 3px;
+    background-color: #121826 ;
 }
