@@ -41,10 +41,7 @@ console.log(NewState)
       <Switch>
         <Route exact path='/'>
        
-        {//Users.map((user) =>(
-          //<div key={user.id}>{user.Fname}</div>
-        /*))*/} 
-        <QuickFilteringGrid dataA={Users}/>
+        <QuickFilteringGrid/>
         </Route>
 
       </Switch>

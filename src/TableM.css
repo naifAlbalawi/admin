@@ -5,10 +5,19 @@
     align-items: center;
 }
 .head .add {
-    margin-left: 70%;
-    width: 120px;
+    margin-left: 65%;
+    width: 90px;
     font-size: 50px;
-    
-    border-radius: 3px;
+    border-radius: 8px;
     background-color: #121826 ;
+}
+.table {
+    color: white;
+    position: static;
+}
+.MuiDataGrid-footerCell {
+    background-color: white;
+}
+.MuiPagination-root {
+     background-color: white;
 }

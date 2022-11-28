@@ -1,24 +1,27 @@
 import React,{useState,useEffect, useRef} from 'react';
 import Box from '@mui/material/Box';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+
 import { DataGrid, GridToolbar,GridActionsCellItem } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Typography } from '@mui/material';
+import LinearProgress from '@mui/material/LinearProgress';
 import * as AiIcons from 'react-icons/ai'
 import SaveIcon from '@mui/icons-material/Save';
 
+import BasicModal from './UserAdd'
 import {db} from './firebase-config'
 import { collection, getDocs,getDoc,addDoc,updateDoc,deleteDoc,doc} from "firebase/firestore";
 import { gridClasses } from '@mui/system';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { Button } from 'react-admin';
 import './TableM.css'
 
 
 function QuickFilteringGrid() {
     const [Users,setUsers] = useState([])
-    const [pageSize,setpageSize] = useState(5)
-    const [update,setUpdate] = useState(false)
+    const [pageSize,setpageSize] = useState(7)
+    const [update,setUpdate] = useState(true)
     const saveButton = useRef(null);
     useEffect(()=> {
         getDocs(collection(db, "Users"))
@@ -38,6 +41,17 @@ function QuickFilteringGrid() {
         deleteDoc(doc(db,'Users',user))
         setUpdate(true)
       }
+      function addingUser(Fname,Lname,email) {
+        addDoc(collection(db,'Users'),
+        {
+          Fname:Fname,
+          Lname:Lname,
+          email:email
+        })
+        setUpdate(true)
+      }
+
+
       function updateInfo(user) {
         updateDoc(doc(db,'Users',user.id),
         {
@@ -73,7 +87,7 @@ function QuickFilteringGrid() {
           saveButton.current.style.color='grey';
           saveButton.current.style.curser='not-allowed';
 
-        }} label="save" style={{color:'grey',curser:'default'}}/>
+        }} label="save" style={{color:'white',curser:'default'}}/>
       ]
     }
 
@@ -84,23 +98,30 @@ function QuickFilteringGrid() {
   []);
 
   return (
-    <Box sx={{ height: 400, width:721.5 ,color:'white' ,margin:'auto'}}>
+    <Box sx={{ height: 479, width:725.5 ,color:'white',textAlign:'center' ,margin:'auto'}}>
       <div className='head'>
         <Typography variant='h5' component="h5" sx={{textAlign:'center',mt:3,mb:3,color:'white',display:'inline'}}>
             Manage Users
         </Typography>
-        <GridActionsCellItem className='add' icon={<PersonAddAltIcon style={{'font-size':'40px'}}/>} onClick={()=> alert('k')} label="Delete" style={{color:'white'}}/>
-  
+        <BasicModal addingUser= {addingUser} className='add'/>
+        
         </div>
-      <DataGrid columns={columns} rows={Users} getRowId={row=>row.id} sx={{color:'white',textAlign:'center'}} rowsPerPageOptions={[5,10,20]} pageSize={pageSize} onPageSizeChange={(newPageSize)=>setpageSize(newPageSize)}
-      getRowSpacing={(row) => ({
-        top:row.isFirstVisible?0:5,
-        bottom:row.isLastVisible?0:5})} onCellEditCommit={(row)=> {
+      <DataGrid className='table' loading={update} columns={columns} rows={Users} getRowId={row=>row.id} sx={{color:'white',textAlign:'center', background:'black ',border:'solid #20293A', 
+      '& .MuiDataGrid-row': {
+      background: '#121826',
+    }, '& .MuiDataGrid-row:hover': {
+      background: '#20293A',
+    },
+    '& 	.MuiTablePagination-root': {
+      color: 'white',
+    }
+  }} 	 rowsPerPageOptions={[7,10,20]} pageSize={pageSize} onPageSizeChange={(newPageSize)=>setpageSize(newPageSize)}
+       onCellEditCommit={(row)=> {
           
           saveButton.current.style.curser='pointer';
           saveButton.current.style.color='white';
           
-        }}/>
+        }}  />
     
     </Box>
   );
