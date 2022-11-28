@@ -1,24 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+
+import React,{useEffect,useState} from 'react';
+import {BrowserRouter as Router , Switch,Route} from 'react-router-dom'
+import Navbar from './Navbar';
+import './App.css'
+import Table from './Table';
+import {db} from './firebase-config'
+import QuickFilteringGrid from './TableM';
+import { collection, getDocs,setDoc} from "firebase/firestore";
 
 function App() {
+
+  const [na,setna] = useState('')
+  const [Users,setUsers] = useState(null)
+  
+ 
+  
+// access the db collection
+const getFirestoreData = async () => {
+  // log each doc
+}
+useEffect(()=> {
+  getDocs(collection(db, "Users"))
+  .then((data)=>{ 
+    const NewState = [];
+    data.forEach((doc) => {
+    NewState.push({id:doc.id, ...doc.data()})
+    console.log(doc)
+})
+console.log(NewState)
+    setUsers(NewState)
+
+})},[]);
+   
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar/>
+      <Switch>
+        <Route exact path='/'>
+       
+        {//Users.map((user) =>(
+          //<div key={user.id}>{user.Fname}</div>
+        /*))*/} 
+        <QuickFilteringGrid dataA={Users}/>
+        </Route>
+
+      </Switch>
+    </Router>
   );
 }
 
