@@ -114,7 +114,10 @@ function QuickFilteringGrid() {
     },
     '& 	.MuiTablePagination-root': {
       color: 'white',
-    }
+    },
+    '& .MuiButtonBase-root': {
+      color: 'white',
+    },
   }} 	 rowsPerPageOptions={[7,10,20]} pageSize={pageSize} onPageSizeChange={(newPageSize)=>setpageSize(newPageSize)}
        onCellEditCommit={(row)=> {
           
