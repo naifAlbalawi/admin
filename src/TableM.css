@@ -21,3 +21,10 @@
 .MuiPagination-root {
      background-color: white;
 }
+.css-1bqdied-JoyInput-input {
+    color: white;
+}
+.css-13ifswk-JoySelect-indicator{
+    background-color: gray;
+    display: block;
+}

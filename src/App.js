@@ -3,9 +3,9 @@ import React,{useEffect,useState} from 'react';
 import {BrowserRouter as Router , Switch,Route} from 'react-router-dom'
 import Navbar from './Navbar';
 import './App.css'
-import Table from './Table';
+import TableFoundPosts from './TableFoundPosts';
 import {db} from './firebase-config'
-import QuickFilteringGrid from './TableM';
+import TableUsers from './TableUsers';
 import { collection, getDocs,setDoc} from "firebase/firestore";
 
 function App() {
@@ -15,22 +15,7 @@ function App() {
   
  
   
-// access the db collection
-const getFirestoreData = async () => {
-  // log each doc
-}
-useEffect(()=> {
-  getDocs(collection(db, "Users"))
-  .then((data)=>{ 
-    const NewState = [];
-    data.forEach((doc) => {
-    NewState.push({id:doc.id, ...doc.data()})
-    console.log(doc)
-})
-console.log(NewState)
-    setUsers(NewState)
 
-})},[]);
    
 
 
@@ -41,7 +26,11 @@ console.log(NewState)
       <Switch>
         <Route exact path='/'>
        
-        <QuickFilteringGrid/>
+        <TableUsers/>
+        </Route>
+        <Route exact path='/LostPosts'>
+        <TableFoundPosts/>
+       
         </Route>
 
       </Switch>

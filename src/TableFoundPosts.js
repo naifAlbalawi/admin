@@ -1,30 +1,24 @@
 import React,{useState,useEffect, useRef} from 'react';
 import Box from '@mui/material/Box';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-
-import { DataGrid, GridToolbar,GridActionsCellItem } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
+import { getAuth, createFoundWithEmailAndPassword } from "firebase/auth";
+import { DataGrid,GridActionsCellItem } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Typography } from '@mui/material';
-import LinearProgress from '@mui/material/LinearProgress';
-import * as AiIcons from 'react-icons/ai'
 import SaveIcon from '@mui/icons-material/Save';
-
-import BasicModal from './UserAdd'
+import BasicModal from './FoundAdd'
 import {db} from './firebase-config'
 import { collection, getDocs,getDoc,addDoc,updateDoc,deleteDoc,doc} from "firebase/firestore";
-import { gridClasses } from '@mui/system';
-import { Button } from 'react-admin';
 import './TableM.css'
 
 
-function QuickFilteringGrid() {
-    const [Users,setUsers] = useState([])
-    const [pageSize,setpageSize] = useState(7)
+
+function TableFoundPosts() {
+    const [Posts,setFoundItems] = useState([])
+    const [pageSize,setpageSize] = useState(10)
     const [update,setUpdate] = useState(true)
     const saveButton = useRef(null);
     useEffect(()=> {
-        getDocs(collection(db, "Users"))
+        getDocs(collection(db, "Found Items"))
         .then((data)=>{ 
           const NewState = [];
           data.forEach((doc) => {
@@ -32,32 +26,38 @@ function QuickFilteringGrid() {
         
       })
       console.log(NewState)
-          setUsers(NewState)
+          setFoundItems(NewState)
           setUpdate(false)
       
       })},[update]);
+
+
+
+
+
   
-      function deleteUser (user) {
-        deleteDoc(doc(db,'Users',user))
+      function deleteFound (FoundItem) {
+        deleteDoc(doc(db,'Found Items',FoundItem))
         setUpdate(true)
       }
-      function addingUser(Fname,Lname,email) {
-        addDoc(collection(db,'Users'),
+      function addingFound(Fname,Lname,email,password) {
+        addDoc(collection(db,'Found Items'),
         {
           Fname:Fname,
           Lname:Lname,
           email:email
         })
+        
         setUpdate(true)
       }
 
 
-      function updateInfo(user) {
-        updateDoc(doc(db,'Users',user.id),
+      function updateInfo(Found) {
+        updateDoc(doc(db,'Found Items',Found.id),
         {
-          Fname:user.row.Fname,
-          Lname:user.row.Lname,
-          email:user.row.email
+          name:Found.row.name,
+          location:Found.row.location,
+          description:Found.row.description
         }
         )
         setUpdate(true)
@@ -69,19 +69,31 @@ function QuickFilteringGrid() {
     visibleFields: VISIBLE_FIELDS,
     rowLength: 100,
   });*/
+  function places(){
+    var locations =[]
+    for(var i=0;i<=73;i++){
+      locations.push('building '+i)
+    }
+    return locations
+
+  }
 
   // Otherwise filter will be applied on fields such as the hidden column id
   const columns = React.useMemo(()=>[
-   // {field : 'Avatar' , headerName='user',width=90, renderCell: {params} =><AiIcons.AiOutlineUser/> ,sortable:false,filterable:false,editable:false},
+   // {field : 'Avatar' , headerName='Found',width=90, renderCell: {params} =><AiIcons.AiOutlineFound/> ,sortable:false,filterable:false,editable:false},
     {field:'id',headerName:'id',width:220},
-    {field:'Fname',headerName:'First Name',width:100,editable:true},
-    {field:'Lname',headerName:'Last Name',width:100,editable:true},
-    {field:'email',headerName:'Email',width:200,editable:true},
+    {field:'UserID',headerName:'UserID',width:100,editable:false},
+    {field:'name',headerName:'name',width:150,editable:true},
+    {field:'date',headerName:'date',width:200,editable:false,renderCell: (params) =>{
+    return (new Date(params.value.seconds*1000)).toLocaleString() }},
+    {field:'description',headerName:'description',width:200,editable:true},
+    {field:'location',headerName:'location',width:200,type:'singleSelect',valueOptions:places(),editable:true},
+    
     {
       field: 'actions',
       type: 'actions',
       getActions: (params) => [
-        <GridActionsCellItem icon={<DeleteIcon/>} onClick={()=> deleteUser(params.id)} label="Delete" style={{color:'white'}}/>,
+        <GridActionsCellItem icon={<DeleteIcon/>} onClick={()=> deleteFound(params.id)} label="Delete" style={{color:'white'}}/>,
         <GridActionsCellItem  ref={saveButton}  icon={<SaveIcon/>} onClick={()=> {
           updateInfo(params);
           saveButton.current.style.color='grey';
@@ -98,15 +110,15 @@ function QuickFilteringGrid() {
   []);
 
   return (
-    <Box sx={{ height: 479, width:725.5 ,color:'white',textAlign:'center' ,margin:'auto'}}>
+    <Box sx={{ height: 635, width:1180 ,color:'white',textAlign:'center' ,margin:'auto'}}>
       <div className='head'>
         <Typography variant='h5' component="h5" sx={{textAlign:'center',mt:3,mb:3,color:'white',display:'inline'}}>
-            Manage Users
+            Manage Founds
         </Typography>
-        <BasicModal addingUser= {addingUser} className='add'/>
+        <BasicModal addingFound= {addingFound} className='add'/>
         
         </div>
-      <DataGrid className='table' loading={update} columns={columns} rows={Users} getRowId={row=>row.id} sx={{color:'white',textAlign:'center', background:'black ',border:'solid 1px white', 
+      <DataGrid className='table' loading={update} columns={columns} rows={Posts} getRowId={row=>row.id} sx={{color:'white',textAlign:'center', background:'black ',border:'solid 1px white', 
       '& .MuiDataGrid-row': {
       background: '#121826',
     }, '& .MuiDataGrid-row:hover': {
@@ -118,7 +130,7 @@ function QuickFilteringGrid() {
     '& .MuiButtonBase-root': {
       color: 'white',
     },
-  }} 	 rowsPerPageOptions={[7,10,20]} pageSize={pageSize} onPageSizeChange={(newPageSize)=>setpageSize(newPageSize)}
+  }} 	 rowsPerPageOptions={[10,10,20]} pageSize={pageSize} onPageSizeChange={(newPageSize)=>setpageSize(newPageSize)}
        onCellEditCommit={(row)=> {
           
           saveButton.current.style.curser='pointer';
@@ -132,4 +144,4 @@ function QuickFilteringGrid() {
 
 
  
-export default QuickFilteringGrid;
+export default TableFoundPosts;
