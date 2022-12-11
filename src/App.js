@@ -7,7 +7,7 @@ import TableFoundPosts from './TableFoundPosts';
 import {db} from './firebase-config'
 import TableUsers from './TableUsers';
 import { collection, getDocs,setDoc} from "firebase/firestore";
-
+import TableLostPosts from './TableLostPosts'
 function App() {
 
   const [na,setna] = useState('')
@@ -28,8 +28,13 @@ function App() {
        
         <TableUsers/>
         </Route>
-        <Route exact path='/LostPosts'>
+        <Route exact path='/FoundPosts'>
         <TableFoundPosts/>
+       
+        </Route>
+        <Route exact path='/LostPosts'>
+      
+        <TableLostPosts/>
        
         </Route>
 

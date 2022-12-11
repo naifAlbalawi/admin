@@ -42,8 +42,8 @@ function TableUsers() {
 
           setDoc(doc(db,'Users',pr.user.uid),
         {
-          Fname:Fname,
-          Lname:Lname,
+          FName:Fname,
+          LName:Lname,
           email:email
         })
         
@@ -60,12 +60,12 @@ function TableUsers() {
 
 
       function updateInfo(user) {
-        const auth = getAuth();
+       
 
   updateDoc(doc(db,'Users',user.id),
         {
-          Fname:user.row.Fname,
-          Lname:user.row.Lname,
+          FName:user.row.FName,
+          LName:user.row.LName,
           email:user.row.email
         }
         )
@@ -73,34 +73,19 @@ function TableUsers() {
 
       ;}
 
-      function sign_in(user){
-        const auth = getAuth();
-        signInWithEmailAndPassword(auth, user.email, user.password)
-         .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          // ...
-        })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
-      }
+      
+  
 
         
 
- /* const { data } = useDemoData({
-    dataSet: 'Employee',
-    visibleFields: VISIBLE_FIELDS,
-    rowLength: 100,
-  });*/
+
 
   // Otherwise filter will be applied on fields such as the hidden column id
   const columns = React.useMemo(()=>[
    // {field : 'Avatar' , headerName='user',width=90, renderCell: {params} =><AiIcons.AiOutlineUser/> ,sortable:false,filterable:false,editable:false},
     {field:'id',headerName:'id',width:220},
-    {field:'Fname',headerName:'First Name',width:100,editable:true},
-    {field:'Lname',headerName:'Last Name',width:100,editable:true},
+    {field:'FName',headerName:'First Name',width:100,editable:true},
+    {field:'LName',headerName:'Last Name',width:100,editable:true},
     {field:'email',headerName:'Email',width:200,editable:false},
     {
       field: 'actions',

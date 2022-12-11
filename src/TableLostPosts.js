@@ -5,14 +5,14 @@ import { DataGrid,GridActionsCellItem } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Typography } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
-import BasicModal from './FoundAdd'
+import BasicModal from './LostAdd'
 import {db} from './firebase-config'
 import { collection, getDocs,getDoc,addDoc,updateDoc,deleteDoc,doc, Timestamp} from "firebase/firestore";
 import './TableM.css'
 
 
 
-function TableFoundPosts() {
+function TableLostPosts() {
     const [Posts,setFoundItems] = useState([])
     const [pageSize,setpageSize] = useState(10)
     const [update,setUpdate] = useState(true)
@@ -22,7 +22,7 @@ function TableFoundPosts() {
         .then((data)=>{ 
           const NewState = [];
           data.forEach((doc) => {
-            if(doc.data().found){
+            if(!doc.data().found){
               console.log(doc.data().postedAt.seconds)
           NewState.push({id:doc.id, ...doc.data()})}
         
@@ -42,7 +42,7 @@ function TableFoundPosts() {
         deleteDoc(doc(db,'posts',FoundItem))
         setUpdate(true)
       }
-      function addingFound(desc,contact,found,location,name,time,title,user) {
+      function addingFound(desc,contact,found,location,name,phone,time,title,user) {
         addDoc(collection(db,'posts'),
        {
           desc,
@@ -151,4 +151,4 @@ function TableFoundPosts() {
 
 
  
-export default TableFoundPosts;
+export default TableLostPosts;

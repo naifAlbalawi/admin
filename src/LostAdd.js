@@ -22,7 +22,6 @@ export default function BasicModalDialog(addingFound) {
   const [contact, setContact] = React.useState('');
   const [name, setName] = React.useState('');
   const [user, setUser] = React.useState('');
- 
   const [title, setTitle] = React.useState('');
   const [date, setdate] = React.useState('');
   const [location, setlocation] = React.useState('');
@@ -75,7 +74,7 @@ export default function BasicModalDialog(addingFound) {
               addingFound.addingFound(
                 desc,
                 contact,
-                true,
+                false,
                 location,
                 name,
                 date,
