@@ -12,14 +12,6 @@ function App() {
 
   const [na,setna] = useState('')
   const [Users,setUsers] = useState(null)
-  
- 
-  
-
-   
-
-
-
   return (
     <Router>
       <Navbar/>

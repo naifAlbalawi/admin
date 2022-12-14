@@ -120,7 +120,7 @@ function TableLostPosts() {
     <Box sx={{ height: 635, width:1540 ,color:'white',textAlign:'center' ,margin:'auto'}}>
       <div className='head'>
         <Typography variant='h5' component="h5" sx={{textAlign:'center',mt:3,mb:3,color:'white',display:'inline'}}>
-            Manage Founds
+            Manage Losts
         </Typography>
         <BasicModal addingFound= {addingFound} className='add'/>
         
